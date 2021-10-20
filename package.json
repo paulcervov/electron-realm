@@ -1,0 +1,17 @@
+{
+  "name": "electron-realm",
+  "version": "1.0.0",
+  "description": "Hello World with Electron and Realm",
+  "main": "main.js",
+  "author": "paul.cervov@helastel.com",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "build:mac": "electron-builder -m"
+  },
+  "devDependencies": {
+    "electron": "^15.2.0",
+    "electron-builder": "^22.13.1"
+  }
+}
