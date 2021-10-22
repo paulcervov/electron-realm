@@ -1,6 +1,7 @@
 const Electron = require('electron');
 const path = require('path');
 const Realm = require('realm');
+const {APP_ENV, APP_ID} = require('./app.config');
 
 process.chdir(Electron.app.getPath('userData'));
 
@@ -14,14 +15,17 @@ async function createBrowserWindow() {
     });
 
     await browserWindow.loadFile('index.html');
-    browserWindow.webContents.openDevTools();
+
+    if(APP_ENV === 'development') {
+        browserWindow.webContents.openDevTools();
+    }
 
     return browserWindow;
 }
 
 async function createRealmConnection() {
 
-    const realmApp = new Realm.App({id: "application-0-ovjao"});
+    const realmApp = new Realm.App({id: APP_ID});
 
     const Cat = {
         name: "Cat",
