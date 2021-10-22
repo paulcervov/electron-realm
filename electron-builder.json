@@ -2,13 +2,14 @@
   "appId": "com.helastel.electron-realm",
   "productName": "Electron Realm App",
   "copyright": "Helastel LTD.",
-  "asar": false,
+  "asar": true,
   "dmg": {
     "background": null,
     "window": {
       "width": "540",
       "height": "380"
-    }
+    },
+    "sign": false
   },
   "files": [
     "**/*",

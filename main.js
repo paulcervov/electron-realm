@@ -1,14 +1,10 @@
 const Electron = require('electron');
 const path = require('path');
 const Realm = require('realm');
-require('dotenv').config()
 
-// change PWD to writable folder
-if(process.env.APP_ENV === 'build') {
-    process.chdir(Electron.app.getPath('userData'));
-}
+process.chdir(Electron.app.getPath('userData'));
 
-async function createBrowserWindow () {
+async function createBrowserWindow() {
     const browserWindow = new Electron.BrowserWindow({
         width: 800,
         height: 600,
@@ -24,9 +20,8 @@ async function createBrowserWindow () {
 }
 
 async function createRealmConnection() {
+
     const realmApp = new Realm.App({id: "application-0-ovjao"});
-    const user = await realmApp.logIn(Realm.Credentials.anonymous());
-    await user.refreshCustomData();
 
     const Cat = {
         name: "Cat",
@@ -38,6 +33,7 @@ async function createRealmConnection() {
         primaryKey: '_id',
     };
 
+    await realmApp.logIn(Realm.Credentials.anonymous());
     const realmConnection = await Realm.open({
         schema: [Cat],
         sync: {
@@ -48,27 +44,27 @@ async function createRealmConnection() {
             },
             existingRealmFileBehavior: {
                 type: 'openImmediately'
-            }
+            },
         },
     });
 
-    return {realmConnection, realmApp};
+    return realmConnection;
 }
 
-
-async function bootstrap(){
-    await Electron.app.whenReady();
+Promise.all([
+        Electron.app.whenReady(),
+        createRealmConnection()
+    ]
+).then(async ([_, realmConnection]) => {
 
     const browserWindow = await createBrowserWindow();
 
-    const {realmApp, realmConnection} = await createRealmConnection();
+    const cats = realmConnection.objects('Cat');
 
     Electron.ipcMain.handle("cats.list", (event, data) => {
-        const items = realmConnection.objects('Cat')
-            .map(({name, age, _id}) => ({name, age, _id: _id.toString()}));
+        const items = cats.map(({name, age, _id}) => ({name, age, id: _id.toString()}));
         return {items};
     });
-
 
     Electron.app.on('window-all-closed', () => {
         realmConnection.close();
@@ -78,19 +74,13 @@ async function bootstrap(){
     Electron.app.on('quit', () => {
         realmConnection.close();
         Electron.app.quit()
-    })
+    });
 
-    /*
+    /*browserWindow.webContents.send('main', {message: 'Message from main!'});
     Electron.ipcMain.on('main', (event, data) => {
         console.log('Received from renderer, data: %s', JSON.stringify(data));
-    });
-    browserWindow?.webContents.send('main', {message: 'Message from main!'});
-    */
-}
+    });*/
 
-bootstrap()
-
-
-
-
-
+}).catch((err) => {
+    console.error(err)
+});
