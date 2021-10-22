@@ -1,10 +1,15 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const Electron = require('electron');
 const path = require('path');
+const Realm = require('realm');
+require('dotenv').config()
 
-let win;
+// change PWD to writable folder
+if(process.env.APP_ENV === 'build') {
+    process.chdir(Electron.app.getPath('userData'));
+}
 
-function createWindow () {
-    win = new BrowserWindow({
+async function createBrowserWindow () {
+    const browserWindow = new Electron.BrowserWindow({
         width: 800,
         height: 600,
         webPreferences: {
@@ -12,25 +17,80 @@ function createWindow () {
         }
     });
 
-    win.loadFile('index.html');
-    win.webContents.openDevTools();
+    await browserWindow.loadFile('index.html');
+    browserWindow.webContents.openDevTools();
+
+    return browserWindow;
 }
 
-app.whenReady().then(() => {
-    createWindow()
-})
+async function createRealmConnection() {
+    const realmApp = new Realm.App({id: "application-0-ovjao"});
+    const user = await realmApp.logIn(Realm.Credentials.anonymous());
+    await user.refreshCustomData();
 
-app.on('window-all-closed', () => {
-    app.quit()
-})
+    const Cat = {
+        name: "Cat",
+        properties: {
+            _id: "objectId",
+            name: "string",
+            age: "int",
+        },
+        primaryKey: '_id',
+    };
 
-app.on('quit', () => {
-    app.quit()
-})
+    const realmConnection = await Realm.open({
+        schema: [Cat],
+        sync: {
+            user: realmApp.currentUser,
+            partitionValue: "myPartition",
+            newRealmFileBehavior: {
+                type: 'openImmediately'
+            },
+            existingRealmFileBehavior: {
+                type: 'openImmediately'
+            }
+        },
+    });
+
+    return {realmConnection, realmApp};
+}
 
 
-ipcMain.on("toMain", (event, data) => {
-    console.log('To main, data: %s', JSON.stringify(data));
+async function bootstrap(){
+    await Electron.app.whenReady();
 
-    win.webContents.send('fromMain', 'Response');
-});
+    const browserWindow = await createBrowserWindow();
+
+    const {realmApp, realmConnection} = await createRealmConnection();
+
+    Electron.ipcMain.handle("cats.list", (event, data) => {
+        const items = realmConnection.objects('Cat')
+            .map(({name, age, _id}) => ({name, age, _id: _id.toString()}));
+        return {items};
+    });
+
+
+    Electron.app.on('window-all-closed', () => {
+        realmConnection.close();
+        Electron.app.quit()
+    })
+
+    Electron.app.on('quit', () => {
+        realmConnection.close();
+        Electron.app.quit()
+    })
+
+    /*
+    Electron.ipcMain.on('main', (event, data) => {
+        console.log('Received from renderer, data: %s', JSON.stringify(data));
+    });
+    browserWindow?.webContents.send('main', {message: 'Message from main!'});
+    */
+}
+
+bootstrap()
+
+
+
+
+

@@ -13,5 +13,9 @@
   "devDependencies": {
     "electron": "^15.2.0",
     "electron-builder": "^22.13.1"
+  },
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "realm": "^10.9.0"
   }
 }

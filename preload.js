@@ -4,24 +4,22 @@ const {
 } = require("electron");
 
 contextBridge.exposeInMainWorld(
-    'electron',
+    'main',
     {
-        sendToMain: (data) => {
-            ipcRenderer.send('toMain', data);
+        send: (data) => {
+            ipcRenderer.send('main', data)
         },
-        receiveFromMain: (fn) => {
-            ipcRenderer.on('fromMain', (event, ...args) => fn(...args));
+        receive: (fn) => {
+            ipcRenderer.on('main', (event, ...args) => fn(...args))
         }
     }
-)
+);
 
-window.addEventListener('DOMContentLoaded', () => {
-    const replaceText = (selector, text) => {
-        const element = document.getElementById(selector)
-        if (element) element.innerText = text
+contextBridge.exposeInMainWorld(
+    'api',
+    {
+        cats: {
+            list: (data) => ipcRenderer.invoke('cats.list', data),
+        }
     }
-
-    for (const type of ['chrome', 'node', 'electron']) {
-        replaceText(`${type}-version`, process.versions[type])
-    }
-})
+);
