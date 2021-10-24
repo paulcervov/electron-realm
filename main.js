@@ -86,6 +86,8 @@ Promise.all([
         console.log('Received from renderer, data: %s', JSON.stringify(data));
     });*/
 
+
+
     await autoUpdater.checkForUpdatesAndNotify();
 
 }).catch((err) => {
