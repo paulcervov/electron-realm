@@ -1,20 +1,24 @@
 {
   "name": "electron-realm",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Hello World with Electron and Realm",
+  "repository": "https://github.com/paulcervov/electron-realm",
   "main": "main.js",
   "author": "paul.cervov@helastel.com",
   "license": "MIT",
   "private": true,
   "scripts": {
     "start": "electron .",
-    "build:mac": "electron-builder -m"
+    "build:mac": "electron-builder -m",
+    "increment-version": "versiony package.json --patch && git add . && git commit -m 'New version' && git push"
   },
   "devDependencies": {
     "electron": "^15.2.0",
-    "electron-builder": "^22.13.1"
+    "electron-builder": "^22.13.1",
+    "versiony-cli": "^1.3.0"
   },
   "dependencies": {
+    "electron-updater": "^4.3.9",
     "realm": "^10.9.0"
   }
 }

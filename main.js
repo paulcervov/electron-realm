@@ -1,6 +1,7 @@
 const Electron = require('electron');
 const path = require('path');
 const Realm = require('realm');
+const { autoUpdater } = require('electron-updater');
 const {APP_ENV, APP_ID} = require('./app.config');
 
 process.chdir(Electron.app.getPath('userData'));
@@ -84,6 +85,8 @@ Promise.all([
     Electron.ipcMain.on('main', (event, data) => {
         console.log('Received from renderer, data: %s', JSON.stringify(data));
     });*/
+
+    await autoUpdater.checkForUpdatesAndNotify();
 
 }).catch((err) => {
     console.error(err)

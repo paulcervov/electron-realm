@@ -1,6 +1,10 @@
 {
   "appId": "com.helastel.electron-realm",
-  "productName": "Electron Realm App",
+  "productName": "Electron Realm",
+  "artifactName": "electron-realm-${version}-${os}-${arch}.${ext}",
+  "publish": [
+    { "provider": "github", "private": false, "releaseType": "release" }
+  ],
   "copyright": "Helastel LTD.",
   "asar": true,
   "dmg": {

@@ -121,6 +121,11 @@
     "@types/node" "*"
     xmlbuilder ">=11.0.1"
 
+"@types/semver@^7.3.5":
+  version "7.3.9"
+  resolved "https://registry.yarnpkg.com/@types/semver/-/semver-7.3.9.tgz#152c6c20a7688c30b967ec1841d31ace569863fc"
+  integrity sha512-L/TMpyURfBkf+o/526Zb6kd/tchUP3iBDEPjqjb+U2MAJhVRxxrmr2fwpe08E7QsV7YLcpq0tUaQ9O9x97ZIxQ==
+
 "@types/verror@^1.10.3":
   version "1.10.5"
   resolved "https://registry.yarnpkg.com/@types/verror/-/verror-1.10.5.tgz#2a1413aded46e67a1fe2386800e291123ed75eb1"
@@ -255,6 +260,11 @@ argparse@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/argparse/-/argparse-2.0.1.tgz#246f50f3ca78a3240f6c997e8a9bd1eac49e4b38"
   integrity sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==
+
+arguably@*:
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/arguably/-/arguably-0.1.6.tgz#1eba4689f1f7de08a277b455f2a1f250e8f2d3ed"
+  integrity sha1-HrpGifH33giid7RV8qHyUOjy0+0=
 
 array-back@^3.0.1, array-back@^3.1.0:
   version "3.1.0"
@@ -439,6 +449,14 @@ buffer@^5.1.0, buffer@^5.5.0, buffer@^5.6.0:
   dependencies:
     base64-js "^1.3.1"
     ieee754 "^1.1.13"
+
+builder-util-runtime@8.7.5:
+  version "8.7.5"
+  resolved "https://registry.yarnpkg.com/builder-util-runtime/-/builder-util-runtime-8.7.5.tgz#fbe59e274818885e0d2e358d5b7017c34ae6b0f5"
+  integrity sha512-fgUFHKtMNjdvH6PDRFntdIGUPgwZ69sXsAqEulCtoiqgWes5agrMq/Ud274zjJRTbckYh2PHh8/1CpFc6dpsbQ==
+  dependencies:
+    debug "^4.3.2"
+    sax "^1.2.4"
 
 builder-util-runtime@8.8.1:
   version "8.8.1"
@@ -947,6 +965,20 @@ electron-publish@22.13.1:
     fs-extra "^10.0.0"
     lazy-val "^1.0.5"
     mime "^2.5.2"
+
+electron-updater@^4.3.9:
+  version "4.3.9"
+  resolved "https://registry.yarnpkg.com/electron-updater/-/electron-updater-4.3.9.tgz#247c660bafad7c07935e1b81acd3e9a5fd733154"
+  integrity sha512-LCNfedSwZfS4Hza+pDyPR05LqHtGorCStaBgVpRnfKxOlZcvpYEX0AbMeH5XUtbtGRoH2V8osbbf2qKPNb7AsA==
+  dependencies:
+    "@types/semver" "^7.3.5"
+    builder-util-runtime "8.7.5"
+    fs-extra "^10.0.0"
+    js-yaml "^4.1.0"
+    lazy-val "^1.0.4"
+    lodash.escaperegexp "^4.1.2"
+    lodash.isequal "^4.5.0"
+    semver "^7.3.5"
 
 electron@^15.2.0:
   version "15.2.0"
@@ -1650,6 +1682,16 @@ lodash.camelcase@^4.3.0:
   version "4.3.0"
   resolved "https://registry.yarnpkg.com/lodash.camelcase/-/lodash.camelcase-4.3.0.tgz#b28aa6288a2b9fc651035c7711f65ab6190331a6"
   integrity sha1-soqmKIorn8ZRA1x3EfZathkDMaY=
+
+lodash.escaperegexp@^4.1.2:
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/lodash.escaperegexp/-/lodash.escaperegexp-4.1.2.tgz#64762c48618082518ac3df4ccf5d5886dae20347"
+  integrity sha1-ZHYsSGGAglGKw99Mz11YhtriA0c=
+
+lodash.isequal@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/lodash.isequal/-/lodash.isequal-4.5.0.tgz#415c4478f2bcc30120c22ce10ed3226f7d3e18e0"
+  integrity sha1-QVxEePK8wwEgwizhDtMib30+GOA=
 
 lodash@^4.17.10, lodash@^4.17.15:
   version "4.17.21"
@@ -2669,6 +2711,19 @@ verror@1.10.0, verror@^1.10.0:
     assert-plus "^1.0.0"
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
+
+versiony-cli@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/versiony-cli/-/versiony-cli-1.3.0.tgz#9e30d633d3ad6f434889b41113cf446a960caf75"
+  integrity sha1-njDWM9Otb0NIibQRE89EapYMr3U=
+  dependencies:
+    arguably "*"
+    versiony "*"
+
+versiony@*:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/versiony/-/versiony-2.0.1.tgz#ef425067169a91648426bb4447a5d94fdd7654e0"
+  integrity sha1-70JQZxaakWSEJrtER6XZT912VOA=
 
 webidl-conversions@^3.0.0:
   version "3.0.1"
