@@ -1,10 +1,13 @@
 {
   "name": "electron-realm",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Hello World with Electron and Realm",
   "repository": "https://github.com/paulcervov/electron-realm",
   "main": "main.js",
-  "author": "paul.cervov@helastel.com",
+  "author": {
+    "name": "Paul Cervov",
+    "email": "paul.cervov@helastel.com"
+  },
   "license": "MIT",
   "private": true,
   "scripts": {
