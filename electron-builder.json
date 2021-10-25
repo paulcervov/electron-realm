@@ -31,6 +31,9 @@
     "target": "nsis"
   },
   "linux": {
-    "category": "Utility"
+    "category": "Utility",
+    "publish": [
+      { "provider": "github", "private": false, "releaseType": "release" }
+    ]
   }
 }
