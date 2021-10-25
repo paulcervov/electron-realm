@@ -1,6 +1,6 @@
 {
   "name": "electron-realm",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "Hello World with Electron and Realm",
   "repository": "https://github.com/paulcervov/electron-realm",
   "main": "main.js",
