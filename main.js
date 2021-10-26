@@ -1,14 +1,8 @@
 const Electron = require('electron');
-const log = require('electron-log');
 const { autoUpdater } = require('electron-updater');
 const Realm = require('realm');
 const path = require('path');
 const {APP_ENV, APP_ID} = require('./app.config');
-
-log.info('App starting...');
-
-autoUpdater.logger = log;
-autoUpdater.logger.transports.file.level = 'info';
 
 process.chdir(Electron.app.getPath('userData'));
 
@@ -30,6 +24,8 @@ async function createBrowserWindow() {
     browserWindow.on('closed', () => {
         browserWindow = null;
     })
+
+    browserWindow.webContents.send('version', Electron.app.getVersion());
 
     return browserWindow;
 }
@@ -66,20 +62,52 @@ async function createRealmConnection() {
     return realmConnection;
 }
 
+async function initElectronUpdater(browserWindow) {
+    autoUpdater.on('checking-for-update', () => {
+        const message = 'Checking for update...';
+        browserWindow.webContents.send('updates', message);
+    })
+    autoUpdater.on('update-available', () => {
+        const message = 'Update available.';
+        browserWindow.webContents.send('updates', message);
+    })
+    autoUpdater.on('update-not-available', () => {
+        const message = 'Update not available.';
+        browserWindow.webContents.send('updates', message);
+    })
+    autoUpdater.on('error', (err) => {
+        const message = `Error in auto-updater: ${err}`;
+        browserWindow.webContents.send('updates', message);
+        console.log(message);
+    })
+    autoUpdater.on('download-progress', ({percent, transferred}) => {
+        const message = `Downloaded ${percent}%`;
+        browserWindow.webContents.send('updates', message);
+        console.log(message);
+    })
+    autoUpdater.on('update-downloaded', (info) => {
+        const message = 'Update downloaded. Restart app for install update.';
+        browserWindow.webContents.send('updates', message);
+        console.log(message);
+    });
+
+    await autoUpdater.checkForUpdatesAndNotify();
+}
+
 Promise.all([
         Electron.app.whenReady(),
         createRealmConnection()
     ]
 ).then(async ([_, realmConnection]) => {
 
-    const browserWindow = await createBrowserWindow();
-
     const cats = realmConnection.objects('Cat');
 
-    Electron.ipcMain.handle("cats.list", (event, data) => {
+    Electron.ipcMain.handle('cats', (event) => {
         const items = cats.map(({name, age, _id}) => ({name, age, id: _id.toString()}));
         return {items};
     });
+
+    const browserWindow = await createBrowserWindow();
 
     Electron.app.on('window-all-closed', () => {
         realmConnection.close();
@@ -91,43 +119,7 @@ Promise.all([
         Electron.app.quit()
     });
 
-
-    autoUpdater.on('checking-for-update', () => {
-        log.info('Checking for update...');
-        browserWindow.webContents.send('main', {message: 'Checking for update...'});
-    })
-    autoUpdater.on('update-available', (info) => {
-        log.info('Update available.');
-        browserWindow.webContents.send('main', {message: 'Update available.'});
-    })
-    autoUpdater.on('update-not-available', (info) => {
-        log.info('Update not available.');
-        browserWindow.webContents.send('main', {message: 'Update not available.'});
-    })
-    autoUpdater.on('error', (err) => {
-        log.info('Error in auto-updater. ' + err);
-        browserWindow.webContents.send('main', {message: 'Error in auto-updater. ' + err});
-    })
-    autoUpdater.on('download-progress', (progressObj) => {
-        let log_message = "Download speed: " + progressObj.bytesPerSecond;
-        log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
-        log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
-        log.info(log_message);
-        browserWindow.webContents.send('main', {message: log_message});
-    })
-    autoUpdater.on('update-downloaded', (info) => {
-        log.info('Update downloaded');
-        browserWindow.webContents.send('main', {message: 'Update downloaded'});
-    });
-
-    browserWindow.webContents.send('main', {message: `App version: ${Electron.app.getVersion()}`});
-
-    /*browserWindow.webContents.send('main', {message: 'Message from main!'});
-    Electron.ipcMain.on('main', (event, data) => {
-        console.log('Received from renderer, data: %s', JSON.stringify(data));
-    });*/
-
-    await autoUpdater.checkForUpdatesAndNotify();
+    await initElectronUpdater(browserWindow);
 
 }).catch((err) => {
     console.error(err)

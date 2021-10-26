@@ -19,8 +19,20 @@
 <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
 <script type="text/babel">
     function App() {
+        const isInit = React.useRef(false);
+        const [version, setVersion] = React.useState(null);
+
+        React.useEffect(() => {
+            if(!isInit.current) {
+                isInit.current = true;
+                window.app.version((version) => {
+                    setVersion(version);
+                });
+            }
+        }, [version]);
+
         return <div className="container">
-            <h1 className="mb-3">Electron Realm v.1.0.14</h1>
+            <h1 className="mb-3">Electron Realm v{version}</h1>
             <CatList/>
         </div>
     }
@@ -30,7 +42,7 @@
         const [items, setItems] = React.useState([]);
 
         async function loadCats(){
-            const {items} = await window.api.cats.list({action: 'getCats'});
+            const {items} = await window.app.cats();
             setItems(items);
         }
 
@@ -78,8 +90,8 @@
 
     ReactDOM.render(<App/>, document.getElementById('app'));
 
-    window.main.receive((data) => {
-        console.log('Received from main, data: %s', JSON.stringify(data));
+    window.app.updates((message) => {
+        console.log(message);
     });
 
     /*

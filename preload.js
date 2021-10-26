@@ -4,22 +4,10 @@ const {
 } = require("electron");
 
 contextBridge.exposeInMainWorld(
-    'main',
+    'app',
     {
-        send: (data) => {
-            ipcRenderer.send('main', data)
-        },
-        receive: (fn) => {
-            ipcRenderer.on('main', (event, ...args) => fn(...args))
-        }
-    }
-);
-
-contextBridge.exposeInMainWorld(
-    'api',
-    {
-        cats: {
-            list: (data) => ipcRenderer.invoke('cats.list', data),
-        }
+        version: (fn) => ipcRenderer.on('version', (event, ...args) => fn(...args)),
+        updates: (fn) => ipcRenderer.on('updates', (event, ...args) => fn(...args)),
+        cats: (data) => ipcRenderer.invoke('cats', data)
     }
 );
