@@ -2,7 +2,7 @@ const Electron = require('electron');
 const { autoUpdater } = require('electron-updater');
 const Realm = require('realm');
 const path = require('path');
-const {APP_ENV, APP_ID} = require('./app.config');
+const {APP_ENV, REALM_APP_ID} = require('./app.config');
 
 process.chdir(Electron.app.getPath('userData'));
 
@@ -32,7 +32,7 @@ async function createBrowserWindow() {
 
 async function createRealmConnection() {
 
-    const realmApp = new Realm.App({id: APP_ID});
+    const realmApp = new Realm.App({id: REALM_APP_ID});
 
     const Cat = {
         name: "Cat",
