@@ -3,7 +3,7 @@ const {APP_ENV} = require('./app.config');
 let config = {
     appId: "com.atplboss.electron-realm",
     productName: "Electron Realm",
-    artifactName: "electron-realm-${version}-${os}-${arch}.${ext}",
+    artifactName: "${productName}-${version}-${os}-${arch}.${ext}",
     publish: [
         { provider: "github", private: false, releaseType: "release" }
     ],
@@ -22,9 +22,6 @@ let config = {
     mac: {
         target: "dmg",
         category: "public.app-category.utilities",
-        hardenedRuntime : true,
-        gatekeeperAssess: false,
-        entitlements: "./build/entitlements.mac.plist",
         entitlementsInherit: "./build/entitlements.mac.plist"
     },
     win: {

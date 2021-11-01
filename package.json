@@ -17,7 +17,6 @@
     "publish:mac": "electron-builder -m zip -p always"
   },
   "devDependencies": {
-    "dotenv": "^10.0.0",
     "electron": "^15.2.0",
     "electron-builder": "^22.13.1",
     "electron-notarize": "^1.1.1",

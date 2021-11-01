@@ -4,6 +4,8 @@ const {join} = require('path');
 
 exports.default = async function notarizing({electronPlatformName, appOutDir, packager}) {
 
+    console.log('Start notarize')
+
     if (electronPlatformName !== 'darwin') {
         return;
     }
@@ -16,6 +18,8 @@ exports.default = async function notarizing({electronPlatformName, appOutDir, pa
             appleIdPassword: APPLE_ID_PASSWORD,
         });
     } catch (err) {
-        console.log('Error notarizing app: ', err);
+        console.error(err);
     }
+
+    console.log('Done notarize')
 };
