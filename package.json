@@ -1,6 +1,6 @@
 {
   "name": "electron-realm",
-  "version": "1.0.21",
+  "version": "1.0.22",
   "description": "Hello World with Electron and Realm",
   "repository": "https://github.com/paulcervov/electron-realm",
   "main": "main.js",
@@ -14,7 +14,7 @@
     "open": "electron .",
     "build:mac": "electron-builder -m",
     "increment-version": "versiony package.json --patch && git add . && git commit -m 'New version' && git push",
-    "publish:mac": "electron-builder -m zip -p always"
+    "publish:mac": "electron-builder -m dmg zip -p always"
   },
   "devDependencies": {
     "electron": "^15.2.0",
