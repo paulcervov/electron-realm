@@ -31,7 +31,7 @@ let config = {
         target: "deb",
         category: "Utility",
         publish: [
-            { provider: "github", private: false, releaseType: "release" }
+            { provider: "github", private: true, releaseType: "release" }
         ]
     }
 };
